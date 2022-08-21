@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">JetpackTrainning</string>
+    <string name="my_fragment_text_1">My fragment text 1</string>
+    <string name="my_fragment_text_2">My fragment text 2</string>
+</resources>

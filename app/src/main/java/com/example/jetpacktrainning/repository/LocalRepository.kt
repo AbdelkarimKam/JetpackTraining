@@ -3,7 +3,6 @@ package com.example.jetpacktrainning.repository
 import com.example.jetpacktrainning.data.room.CacheMapper
 import com.example.jetpacktrainning.data.room.CountryDao
 import com.example.jetpacktrainning.model.Country
-import com.example.jetpacktrainning.tools.Resource
 import javax.inject.Inject
 
 class LocalRepository @Inject constructor(

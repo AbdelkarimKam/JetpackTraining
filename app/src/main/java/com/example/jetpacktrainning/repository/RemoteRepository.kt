@@ -9,7 +9,7 @@ class RemoteRepository @Inject constructor(
     private val apiCountries: ApiCountries,
     private val networkMapper: NetworkMapper
 ) :  IRemoteRepository{
-    override suspend fun getAllCountries(): List<Country> {
+    override suspend fun getCountries(): List<Country> {
         val networkCountries = apiCountries.getAllCountries()
         return networkMapper.mapFromEntityList(networkCountries.data)
     }

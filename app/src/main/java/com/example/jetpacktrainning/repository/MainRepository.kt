@@ -16,7 +16,7 @@ class MainRepository @Inject constructor(
 
         try {
             traceThreadName()
-            val countries = remoteRepository.getAllCountries()
+            val countries = remoteRepository.getCountries()
             countries.forEach {
                 localRepository.insertCountry(it)
             }

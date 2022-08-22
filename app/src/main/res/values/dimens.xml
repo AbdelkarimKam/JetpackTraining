@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="big_text">15sp</dimen>
+    <dimen name="medium_text">15sp</dimen>
+    <dimen name="big_text">27sp</dimen>
     <dimen name="big_margin">15dp</dimen>
 </resources>

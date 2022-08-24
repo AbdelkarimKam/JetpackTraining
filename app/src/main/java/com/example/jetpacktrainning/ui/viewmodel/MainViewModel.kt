@@ -5,8 +5,6 @@ import com.example.jetpacktrainning.model.Country
 import com.example.jetpacktrainning.repository.MainRepository
 import com.example.jetpacktrainning.tools.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -39,13 +37,11 @@ class MainViewModel @Inject constructor(
             when (mainStateEvent) {
                 is MainStateEvent.GetCountriesEvent -> {
                     mainRepository.getCountries()
-                        .flowOn(Dispatchers.IO)
                         .onEach { _countriesState.value = it }
                         .launchIn(viewModelScope)
                 }
                 is MainStateEvent.GetCountryEvent -> {
                     mainRepository.getCountryById(mainStateEvent.id)
-                        .flowOn(Dispatchers.IO)
                         .onEach { _countryState.value = it }
                         .launchIn(viewModelScope)
                 }

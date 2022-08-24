@@ -1,6 +1,5 @@
 package com.example.jetpacktrainning.repository
 
-import android.util.Log
 import com.example.jetpacktrainning.model.Country
 import com.example.jetpacktrainning.tools.Resource
 import kotlinx.coroutines.flow.Flow
@@ -15,7 +14,6 @@ class MainRepository @Inject constructor(
         emit(Resource.loading(null))
 
         try {
-            traceThreadName()
             val countries = remoteRepository.getCountries()
             countries.forEach {
                 localRepository.insertCountry(it)
@@ -36,7 +34,6 @@ class MainRepository @Inject constructor(
         emit(Resource.loading(null))
 
         try {
-            traceThreadName()
             val country = remoteRepository.getCountryById(id)
             localRepository.insertCountry(country)
         } catch (e: Exception) {
@@ -49,11 +46,5 @@ class MainRepository @Inject constructor(
         } catch (e: Exception) {
             emit(Resource.error(null, message = e.message))
         }
-    }
-
-    private fun traceThreadName() = Log.d(TAG,"Current Thread ${Thread.currentThread().name}")
-
-    companion object {
-        private const val TAG = "MainRepository"
     }
 }

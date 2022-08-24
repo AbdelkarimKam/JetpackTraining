@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
+import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -18,11 +19,12 @@ object RepositoryModule {
     @ViewModelScoped
     @Provides
     fun provideRemoteRepository(
-         apiCountries: ApiCountries,
-        networkMapper: NetworkMapper
+        apiCountries: ApiCountries,
+        networkMapper: NetworkMapper,
+        ioDispatcher: CoroutineDispatcher
     ): IRemoteRepository {
         return RemoteRepository(
-            apiCountries, networkMapper
+            apiCountries, networkMapper, ioDispatcher
         )
     }
 
@@ -30,10 +32,11 @@ object RepositoryModule {
     @Provides
     fun provideLocalRepository(
         countryDao: CountryDao,
-        cacheMapper: CacheMapper
+        cacheMapper: CacheMapper,
+        ioDispatcher: CoroutineDispatcher
     ): ILocalRepository {
         return LocalRepository(
-            countryDao, cacheMapper
+            countryDao, cacheMapper, ioDispatcher
         )
     }
 

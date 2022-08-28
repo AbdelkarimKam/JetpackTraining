@@ -20,11 +20,10 @@ object RepositoryModule {
     @Provides
     fun provideRemoteRepository(
         apiCountries: ApiCountries,
-        networkMapper: NetworkMapper,
-        ioDispatcher: CoroutineDispatcher
+        networkMapper: NetworkMapper
     ): IRemoteRepository {
         return RemoteRepository(
-            apiCountries, networkMapper, ioDispatcher
+            apiCountries, networkMapper
         )
     }
 
@@ -32,11 +31,10 @@ object RepositoryModule {
     @Provides
     fun provideLocalRepository(
         countryDao: CountryDao,
-        cacheMapper: CacheMapper,
-        ioDispatcher: CoroutineDispatcher
+        cacheMapper: CacheMapper
     ): ILocalRepository {
         return LocalRepository(
-            countryDao, cacheMapper, ioDispatcher
+            countryDao, cacheMapper
         )
     }
 
@@ -44,10 +42,11 @@ object RepositoryModule {
     @Provides
     fun provideMainRepository(
         remoteRepository: IRemoteRepository,
-        localRepository: ILocalRepository
+        localRepository: ILocalRepository,
+        ioDispatcher: CoroutineDispatcher
     ): MainRepository {
         return MainRepository(
-            remoteRepository, localRepository
+            remoteRepository, localRepository, ioDispatcher
         )
     }
 }

@@ -2,9 +2,9 @@ package com.example.jetpacktrainning.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.jetpacktrainning.data.room.CountryDao
-import com.example.jetpacktrainning.data.room.CountryDataBase
-import com.example.jetpacktrainning.data.room.CountryDataBase.Companion.DATABASE_NAME
+import com.example.jetpacktrainning.data.datasources.room.CountryDao
+import com.example.jetpacktrainning.data.datasources.room.CountryDataBase
+import com.example.jetpacktrainning.data.datasources.room.CountryDataBase.Companion.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

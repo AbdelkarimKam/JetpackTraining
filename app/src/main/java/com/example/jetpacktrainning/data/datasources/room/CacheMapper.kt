@@ -1,4 +1,4 @@
-package com.example.jetpacktrainning.data.room
+package com.example.jetpacktrainning.data.datasources.room
 
 import com.example.jetpacktrainning.model.Country
 import com.example.jetpacktrainning.tools.EntityMapper

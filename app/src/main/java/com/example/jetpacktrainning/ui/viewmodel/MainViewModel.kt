@@ -2,7 +2,7 @@ package com.example.jetpacktrainning.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.example.jetpacktrainning.model.Country
-import com.example.jetpacktrainning.repository.MainRepository
+import com.example.jetpacktrainning.data.repository.CountryRepository
 import com.example.jetpacktrainning.tools.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -13,7 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val mainRepository: MainRepository
+    private val countryRepository: CountryRepository
 ) : ViewModel() {
 
     private val _countriesState: MutableLiveData<Resource<List<Country>>> by lazy {
@@ -36,14 +36,12 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             when (mainStateEvent) {
                 is MainStateEvent.GetCountriesEvent -> {
-                    mainRepository.getCountries()
+                    countryRepository.getCountries()
                         .onEach { _countriesState.value = it }
-                        .launchIn(viewModelScope)
                 }
                 is MainStateEvent.GetCountryEvent -> {
-                    mainRepository.getCountryById(mainStateEvent.id)
+                    countryRepository.getCountryById(mainStateEvent.id)
                         .onEach { _countryState.value = it }
-                        .launchIn(viewModelScope)
                 }
             }
         }

@@ -1,4 +1,4 @@
-package com.example.jetpacktrainning.repository
+package com.example.jetpacktrainning.data.repository
 
 import com.example.jetpacktrainning.model.Country
 import com.example.jetpacktrainning.tools.Resource
@@ -8,12 +8,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
-class MainRepository @Inject constructor(
+class CountryRepository @Inject constructor(
     private val remoteRepository: IRemoteRepository,
     private val localRepository: ILocalRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getCountries(): Flow<Resource<List<Country>>> = flow {
+    fun getCountries(): Flow<Resource<List<Country>>> = flow {
         emit(Resource.loading(null))
 
         try {
@@ -34,7 +34,7 @@ class MainRepository @Inject constructor(
     }.flowOn(ioDispatcher)
 
 
-    suspend fun getCountryById(id: Int): Flow<Resource<Country>> = flow {
+    fun getCountryById(id: Int): Flow<Resource<Country>> = flow {
         emit(Resource.loading(null))
 
         try {

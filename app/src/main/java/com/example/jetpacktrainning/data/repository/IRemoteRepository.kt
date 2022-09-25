@@ -1,4 +1,4 @@
-package com.example.jetpacktrainning.repository
+package com.example.jetpacktrainning.data.repository
 
 import com.example.jetpacktrainning.model.Country
 

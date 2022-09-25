@@ -1,10 +1,10 @@
 package com.example.jetpacktrainning.di
 
-import com.example.jetpacktrainning.data.retrofit.ApiCountries
-import com.example.jetpacktrainning.data.retrofit.NetworkMapper
-import com.example.jetpacktrainning.data.room.CacheMapper
-import com.example.jetpacktrainning.data.room.CountryDao
-import com.example.jetpacktrainning.repository.*
+import com.example.jetpacktrainning.data.datasources.retrofit.ApiDataSource
+import com.example.jetpacktrainning.data.datasources.retrofit.NetworkMapper
+import com.example.jetpacktrainning.data.datasources.room.CacheMapper
+import com.example.jetpacktrainning.data.datasources.room.CountryDao
+import com.example.jetpacktrainning.data.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,11 +19,11 @@ object RepositoryModule {
     @ViewModelScoped
     @Provides
     fun provideRemoteRepository(
-        apiCountries: ApiCountries,
+        apiDataSource: ApiDataSource,
         networkMapper: NetworkMapper
     ): IRemoteRepository {
         return RemoteRepository(
-            apiCountries, networkMapper
+            apiDataSource, networkMapper
         )
     }
 
@@ -44,8 +44,8 @@ object RepositoryModule {
         remoteRepository: IRemoteRepository,
         localRepository: ILocalRepository,
         ioDispatcher: CoroutineDispatcher
-    ): MainRepository {
-        return MainRepository(
+    ): CountryRepository {
+        return CountryRepository(
             remoteRepository, localRepository, ioDispatcher
         )
     }

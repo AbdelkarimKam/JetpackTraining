@@ -1,9 +1,9 @@
-package com.example.jetpacktrainning.repository
+package com.example.jetpacktrainning.data.repository
 
 import android.util.Log
-import com.example.jetpacktrainning.data.room.CacheMapper
-import com.example.jetpacktrainning.data.room.CountryCacheEntity
-import com.example.jetpacktrainning.data.room.CountryDao
+import com.example.jetpacktrainning.data.datasources.room.CacheMapper
+import com.example.jetpacktrainning.data.datasources.room.CountryCacheEntity
+import com.example.jetpacktrainning.data.datasources.room.CountryDao
 import com.example.jetpacktrainning.model.Country
 import javax.inject.Inject
 

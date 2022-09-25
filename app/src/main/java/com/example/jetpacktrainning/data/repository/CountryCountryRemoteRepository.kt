@@ -6,10 +6,10 @@ import com.example.jetpacktrainning.data.datasources.retrofit.NetworkMapper
 import com.example.jetpacktrainning.model.Country
 import javax.inject.Inject
 
-class RemoteRepository @Inject constructor(
+class CountryCountryRemoteRepository @Inject constructor(
     private val apiDataSource: ApiDataSource,
     private val networkMapper: NetworkMapper
-) : IRemoteRepository {
+) : ICountryRemoteRepository {
     override suspend fun getCountries(): List<Country> {
         traceThreadName()
         val networkCountries = apiDataSource.getAllCountries()

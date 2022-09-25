@@ -2,7 +2,8 @@ package com.example.jetpacktrainning.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.example.jetpacktrainning.model.Country
-import com.example.jetpacktrainning.data.repository.CountryRepository
+import com.example.jetpacktrainning.domain.GetCountryByIdUseCase
+import com.example.jetpacktrainning.domain.GetLatestCountriesUseCase
 import com.example.jetpacktrainning.tools.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -11,7 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val countryRepository: CountryRepository
+    private val getLatestCountriesUseCase: GetLatestCountriesUseCase,
+    private val getCountryByIdUseCase: GetCountryByIdUseCase
 ) : ViewModel() {
 
     private val _countriesState: MutableStateFlow<Resource<List<Country>>> by lazy {
@@ -35,14 +37,12 @@ class MainViewModel @Inject constructor(
     fun setStateEvent(mainStateEvent: MainStateEvent) {
         when (mainStateEvent) {
             is MainStateEvent.GetCountriesEvent -> {
-                countryRepository.getCountries()
-                    .onEach {
-                        _countriesState.emit(it)
-                    }
+                getLatestCountriesUseCase.invoke()
+                    .onEach { _countriesState.emit(it) }
                     .launchIn(viewModelScope)
             }
             is MainStateEvent.GetCountryEvent -> {
-                countryRepository.getCountryById(mainStateEvent.id)
+                getCountryByIdUseCase.invoke(mainStateEvent.id)
                     .onEach { _countryState.emit(it) }
                     .launchIn(viewModelScope)
             }

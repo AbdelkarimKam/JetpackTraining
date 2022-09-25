@@ -7,10 +7,10 @@ import com.example.jetpacktrainning.data.datasources.room.CountryDao
 import com.example.jetpacktrainning.model.Country
 import javax.inject.Inject
 
-class LocalRepository @Inject constructor(
+class CountriesCountryLocalRepository @Inject constructor(
     private val countryDao: CountryDao,
     private val cacheMapper: CacheMapper
-) : ILocalRepository {
+) : ICountryLocalRepository {
     override suspend fun insertCountry(country: Country): Long {
         traceThreadName()
         return countryDao.insert(cacheMapper.mapToEntity(country))

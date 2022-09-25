@@ -5,9 +5,7 @@ import com.example.jetpacktrainning.model.Country
 import com.example.jetpacktrainning.data.repository.CountryRepository
 import com.example.jetpacktrainning.tools.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -16,32 +14,36 @@ class MainViewModel @Inject constructor(
     private val countryRepository: CountryRepository
 ) : ViewModel() {
 
-    private val _countriesState: MutableLiveData<Resource<List<Country>>> by lazy {
-        MutableLiveData<Resource<List<Country>>>().also {
-            setStateEvent(MainStateEvent.GetCountriesEvent)
-        }
+    private val _countriesState: MutableStateFlow<Resource<List<Country>>> by lazy {
+        MutableStateFlow(Resource.loading(null))
     }
 
-    val countriesState: LiveData<Resource<List<Country>>>
-        get() = _countriesState
+    val countriesState: StateFlow<Resource<List<Country>>>
+        get() = _countriesState.asStateFlow()
 
-    private val _countryState: MutableLiveData<Resource<Country>> by lazy {
-        MutableLiveData<Resource<Country>>()
+    private val _countryState: MutableStateFlow<Resource<Country>> by lazy {
+        MutableStateFlow(Resource.loading(null))
     }
 
-    val countryState: LiveData<Resource<Country>>
-        get() = _countryState
+    val countryState: StateFlow<Resource<Country>>
+        get() = _countryState.asStateFlow()
+
+    init {
+        setStateEvent(MainStateEvent.GetCountriesEvent)
+    }
 
     fun setStateEvent(mainStateEvent: MainStateEvent) {
         when (mainStateEvent) {
             is MainStateEvent.GetCountriesEvent -> {
                 countryRepository.getCountries()
-                    .onEach { _countriesState.value = it }
+                    .onEach {
+                        _countriesState.emit(it)
+                    }
                     .launchIn(viewModelScope)
             }
             is MainStateEvent.GetCountryEvent -> {
                 countryRepository.getCountryById(mainStateEvent.id)
-                    .onEach { _countryState.value = it }
+                    .onEach { _countryState.emit(it) }
                     .launchIn(viewModelScope)
             }
         }

@@ -3,6 +3,7 @@ package com.example.jetpacktrainning.ui.fragments
 import android.os.Bundle
 import android.view.View
 import androidx.compose.runtime.ExperimentalComposeApi
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jetpacktrainning.R
@@ -14,6 +15,7 @@ import com.example.jetpacktrainning.tools.displayLoading
 import com.example.jetpacktrainning.ui.adapter.CountrriesAdapter
 import com.example.jetpacktrainning.ui.viewmodel.MainStateEvent
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalComposeApi
 @AndroidEntryPoint
@@ -33,16 +35,18 @@ class ListFragment : BaseFragment<CountriesListLayoutBinding>(CountriesListLayou
     }
 
     private fun subscribeObserver() {
-        mainViewModel.countriesState.observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    displayCountries(it.data!!)
-                }
-                Status.FAILURE -> {
-                    displayError(_context,it.message)
-                }
-                Status.LOADING -> {
-                    displayLoading(_context )
+        lifecycleScope.launchWhenStarted {
+            mainViewModel.countriesState.collectLatest {
+                when (it.status) {
+                    Status.SUCCESS -> {
+                        displayCountries(it.data!!)
+                    }
+                    Status.FAILURE -> {
+                        displayError(_context, it.message)
+                    }
+                    Status.LOADING -> {
+                        displayLoading(_context)
+                    }
                 }
             }
         }

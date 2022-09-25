@@ -2,53 +2,49 @@ package com.example.jetpacktrainning.ui.viewmodel
 
 import androidx.lifecycle.*
 import com.example.jetpacktrainning.model.Country
-import com.example.jetpacktrainning.repository.MainRepository
+import com.example.jetpacktrainning.domain.GetCountryByIdUseCase
+import com.example.jetpacktrainning.domain.GetLatestCountriesUseCase
 import com.example.jetpacktrainning.tools.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val mainRepository: MainRepository
+    private val getLatestCountriesUseCase: GetLatestCountriesUseCase,
+    private val getCountryByIdUseCase: GetCountryByIdUseCase
 ) : ViewModel() {
 
-    private val _countriesState: MutableLiveData<Resource<List<Country>>> by lazy {
-        MutableLiveData<Resource<List<Country>>>().also {
-            setStateEvent(MainStateEvent.GetCountriesEvent)
-        }
+    private val _countriesState: MutableStateFlow<Resource<List<Country>>> by lazy {
+        MutableStateFlow(Resource.loading(null))
     }
 
-    val countriesState: LiveData<Resource<List<Country>>>
-        get() = _countriesState
+    val countriesState: StateFlow<Resource<List<Country>>>
+        get() = _countriesState.asStateFlow()
 
-    private val _countryState: MutableLiveData<Resource<Country>> by lazy {
-        MutableLiveData<Resource<Country>>()
+    private val _countryState: MutableStateFlow<Resource<Country>> by lazy {
+        MutableStateFlow(Resource.loading(null))
     }
 
-    val countryState: LiveData<Resource<Country>>
-        get() = _countryState
+    val countryState: StateFlow<Resource<Country>>
+        get() = _countryState.asStateFlow()
+
+    init {
+        setStateEvent(MainStateEvent.GetCountriesEvent)
+    }
 
     fun setStateEvent(mainStateEvent: MainStateEvent) {
-        viewModelScope.launch {
-            when (mainStateEvent) {
-                is MainStateEvent.GetCountriesEvent -> {
-                    mainRepository.getCountries()
-                        .flowOn(Dispatchers.IO)
-                        .onEach { _countriesState.value = it }
-                        .launchIn(viewModelScope)
-                }
-                is MainStateEvent.GetCountryEvent -> {
-                    mainRepository.getCountryById(mainStateEvent.id)
-                        .flowOn(Dispatchers.IO)
-                        .onEach { _countryState.value = it }
-                        .launchIn(viewModelScope)
-                }
+        when (mainStateEvent) {
+            is MainStateEvent.GetCountriesEvent -> {
+                getLatestCountriesUseCase.invoke()
+                    .onEach { _countriesState.emit(it) }
+                    .launchIn(viewModelScope)
+            }
+            is MainStateEvent.GetCountryEvent -> {
+                getCountryByIdUseCase.invoke(mainStateEvent.id)
+                    .onEach { _countryState.emit(it) }
+                    .launchIn(viewModelScope)
             }
         }
     }

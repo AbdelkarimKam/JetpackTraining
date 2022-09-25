@@ -1,6 +1,6 @@
 package com.example.jetpacktrainning.di
 
-import com.example.jetpacktrainning.data.retrofit.ApiCountries
+import com.example.jetpacktrainning.data.datasources.retrofit.ApiDataSource
 import com.example.jetpacktrainning.tools.Constant
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
@@ -53,9 +53,9 @@ object RetrofitModule {
 
     @Singleton
     @Provides
-    fun provideApiCountries(retrofitBuilder: Retrofit.Builder): ApiCountries {
+    fun provideApiCountries(retrofitBuilder: Retrofit.Builder): ApiDataSource {
         return retrofitBuilder
             .build()
-            .create(ApiCountries::class.java)
+            .create(ApiDataSource::class.java)
     }
 }

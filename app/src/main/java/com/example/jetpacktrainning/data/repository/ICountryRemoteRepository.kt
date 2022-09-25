@@ -1,8 +1,8 @@
-package com.example.jetpacktrainning.repository
+package com.example.jetpacktrainning.data.repository
 
 import com.example.jetpacktrainning.model.Country
 
-interface IRemoteRepository {
+interface ICountryRemoteRepository {
     suspend fun getCountries(): List<Country>
     suspend fun getCountryById(id :Int): Country
 }

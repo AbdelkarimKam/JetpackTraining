@@ -1,4 +1,4 @@
-package com.example.jetpacktrainning.data.retrofit.model
+package com.example.jetpacktrainning.data.datasources.retrofit.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

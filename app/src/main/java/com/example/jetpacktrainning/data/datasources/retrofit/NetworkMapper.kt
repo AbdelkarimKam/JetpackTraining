@@ -1,6 +1,6 @@
-package com.example.jetpacktrainning.data.retrofit
+package com.example.jetpacktrainning.data.datasources.retrofit
 
-import com.example.jetpacktrainning.data.retrofit.model.CountryResponse
+import com.example.jetpacktrainning.data.datasources.retrofit.model.CountryResponse
 import com.example.jetpacktrainning.model.Country
 import com.example.jetpacktrainning.tools.EntityMapper
 import javax.inject.Inject

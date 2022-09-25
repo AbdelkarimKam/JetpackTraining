@@ -1,10 +1,13 @@
 package com.example.jetpacktrainning.di
 
-import com.example.jetpacktrainning.data.retrofit.ApiCountries
-import com.example.jetpacktrainning.data.retrofit.NetworkMapper
-import com.example.jetpacktrainning.data.room.CacheMapper
-import com.example.jetpacktrainning.data.room.CountryDao
-import com.example.jetpacktrainning.repository.*
+import com.example.jetpacktrainning.data.datasources.retrofit.ApiDataSource
+import com.example.jetpacktrainning.data.datasources.retrofit.NetworkMapper
+import com.example.jetpacktrainning.data.datasources.room.CacheMapper
+import com.example.jetpacktrainning.data.datasources.room.CountryDao
+import com.example.jetpacktrainning.data.repository.CountriesCountryLocalRepository
+import com.example.jetpacktrainning.data.repository.CountryCountryRemoteRepository
+import com.example.jetpacktrainning.data.repository.ICountryLocalRepository
+import com.example.jetpacktrainning.data.repository.ICountryRemoteRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,34 +20,23 @@ object RepositoryModule {
 
     @ViewModelScoped
     @Provides
-    fun provideRemoteRepository(
-         apiCountries: ApiCountries,
+    fun provideCountryRemoteRepository(
+        apiDataSource: ApiDataSource,
         networkMapper: NetworkMapper
-    ): IRemoteRepository {
-        return RemoteRepository(
-            apiCountries, networkMapper
+    ): ICountryRemoteRepository {
+        return CountryCountryRemoteRepository(
+            apiDataSource, networkMapper
         )
     }
 
     @ViewModelScoped
     @Provides
-    fun provideLocalRepository(
+    fun provideCountriesLocalRepository(
         countryDao: CountryDao,
         cacheMapper: CacheMapper
-    ): ILocalRepository {
-        return LocalRepository(
+    ): ICountryLocalRepository {
+        return CountriesCountryLocalRepository(
             countryDao, cacheMapper
-        )
-    }
-
-    @ViewModelScoped
-    @Provides
-    fun provideMainRepository(
-        remoteRepository: IRemoteRepository,
-        localRepository: ILocalRepository
-    ): MainRepository {
-        return MainRepository(
-            remoteRepository, localRepository
         )
     }
 }

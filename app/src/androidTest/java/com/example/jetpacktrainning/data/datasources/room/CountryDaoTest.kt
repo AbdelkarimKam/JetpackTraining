@@ -1,4 +1,4 @@
-package com.example.jetpacktrainning.data.room
+package com.example.jetpacktrainning.data.datasources.room
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider

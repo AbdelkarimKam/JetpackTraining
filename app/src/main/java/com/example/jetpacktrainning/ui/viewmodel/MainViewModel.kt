@@ -33,16 +33,16 @@ class MainViewModel @Inject constructor(
         get() = _countryState
 
     fun setStateEvent(mainStateEvent: MainStateEvent) {
-        viewModelScope.launch {
-            when (mainStateEvent) {
-                is MainStateEvent.GetCountriesEvent -> {
-                    countryRepository.getCountries()
-                        .onEach { _countriesState.value = it }
-                }
-                is MainStateEvent.GetCountryEvent -> {
-                    countryRepository.getCountryById(mainStateEvent.id)
-                        .onEach { _countryState.value = it }
-                }
+        when (mainStateEvent) {
+            is MainStateEvent.GetCountriesEvent -> {
+                countryRepository.getCountries()
+                    .onEach { _countriesState.value = it }
+                    .launchIn(viewModelScope)
+            }
+            is MainStateEvent.GetCountryEvent -> {
+                countryRepository.getCountryById(mainStateEvent.id)
+                    .onEach { _countryState.value = it }
+                    .launchIn(viewModelScope)
             }
         }
     }
